@@ -1,4 +1,4 @@
-import {test} from '@playwright/test'
+import {expect, test} from '@playwright/test'
 import { filter } from 'rxjs-compat/operator/filter'
 
 test.beforeEach(async ({page})=>{
@@ -91,4 +91,18 @@ test('located parent element',async({page})=>{
         .getByRole('textbox',{name:"Email"}).click()
     // get the parent using the .alocator(..)
     await page.locator(':text-is("Using the Grid")').locator('..').getByRole('textbox',{name:"Email"}).click()
+})
+
+
+test('reusing the alocators',async({page})=>{
+    // declare the var that refactor the code for basic form 
+    // declare var for the email field 
+    const basicForm = page.locator('nb-card',{hasText:'Basic form'})
+    const emailField = basicForm.getByRole('textbox',{name:'Email'})
+    const passwordField = basicForm.getByRole('textbox',{name:'Password'})
+    await emailField.fill('test@test.com')
+    await passwordField.fill('123456789')
+    await basicForm.getByRole('button',{name:'SUBMIT'}).click()
+
+    await expect(emailField).toHaveValue('test@test.com')
 })
