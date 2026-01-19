@@ -1,4 +1,5 @@
 import {test} from '@playwright/test'
+import { filter } from 'rxjs-compat/operator/filter'
 
 test.beforeEach(async ({page})=>{
     await page.goto('http://localhost:4200/')
@@ -71,4 +72,23 @@ test('locating child elment',async({page})=>{
 
     // alocate the sign up btn by the index 
     await page.locator('nb-card').nth(3).getByRole('button').click()     
+})
+
+test('located parent element',async({page})=>{
+    // get email element on the "using the grid" card by parent and click 
+    await page.locator('nb-card',{hasText:'Using the Grid'})
+        .getByRole('textbox',{name:"Email"}).click()
+
+    // get email by uing the email id on the card and click on it 
+    await page.locator('nb-card',{has: page.locator('#inputEmail1')})
+        .getByRole('textbox',{name:"Email"}).click()
+
+    // using the filter method instead of the second argument on the alocator method
+    await page.locator('nb-card').filter({hasText:'Using the Grid'})
+        .getByRole('textbox',{name:"Email"}).click()
+    // using unique combination on filter method 
+    await page.locator('nb-card').filter({has: page.locator('nb-checkbox')}).filter({hasText: 'SIGN IN'})
+        .getByRole('textbox',{name:"Email"}).click()
+    // get the parent using the .alocator(..)
+    await page.locator(':text-is("Using the Grid")').locator('..').getByRole('textbox',{name:"Email"}).click()
 })
