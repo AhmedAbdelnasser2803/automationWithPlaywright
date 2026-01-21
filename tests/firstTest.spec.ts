@@ -129,3 +129,28 @@ test('extracting value',async({page})=>{
     const emailPlaceHolder = await emailField.getAttribute('placeholder')
     await expect (emailPlaceHolder).toBe('Email')
 })
+
+
+test('assertions',async({page})=>{
+
+    const basicForm = page.locator('nb-card',{hasText:'Basic form'})
+    // genral assertion 
+    // assert the numeric value on const var and compare using expect methed 
+    const value = 5
+    await expect(value).toBeGreaterThan(1)
+    await expect(value).toBeLessThan(10)
+    await expect(value).toBe(5)
+
+    // compare between the txt in the btn with expected
+    const basicFormBtn = await basicForm.getByRole('button',{name:'SUBMIT'}) // alocate the button on the basic form
+    const btnTxt = await basicFormBtn.textContent() // extract the text content of the button
+    await expect(btnTxt).toBe('Submit') // compare the text content with expected value
+
+
+    // locator assertion using toHaveText 
+    await expect(basicFormBtn).toHaveText('Submit')
+    
+    // soft asserrtion using expect.soft
+    // that continues the test even if the assertion fails
+    await expect.soft(btnTxt).toBe('Submit123')
+})
