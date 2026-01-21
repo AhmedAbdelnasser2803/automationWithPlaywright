@@ -106,3 +106,26 @@ test('reusing the alocators',async({page})=>{
 
     await expect(emailField).toHaveValue('test@test.com')
 })
+
+test('extracting value',async({page})=>{
+    // declare the value of basic form 
+    const basicForm = page.locator('nb-card',{hasText:'Basic form'})
+    const emailField = basicForm.getByRole('textbox',{name:'Email'})
+
+    // get the value of the button of basic form
+    const buttonTxt = await basicForm.getByRole('button',{name:'SUBMIT'}).textContent()
+    await expect (buttonTxt).toBe('Submit')
+
+    // get the value of all radio btn value 
+    const radioBtnTxt = await page.locator('nb-radio').allTextContents()
+    await expect (radioBtnTxt).toContain('Option 1')
+
+    // get the the input value on email filed
+    await emailField.fill('test@test.com')
+    const emailValue = await emailField.inputValue()
+    await expect (emailValue).toBe('test@test.com')
+
+    // get the vaule of placeholder on email field
+    const emailPlaceHolder = await emailField.getAttribute('placeholder')
+    await expect (emailPlaceHolder).toBe('Email')
+})
