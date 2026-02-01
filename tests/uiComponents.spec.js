@@ -3,14 +3,14 @@ import {test, expect} from '@playwright/test';
 
 test.beforeEach(async ({page})=>{
     await page.goto('http://localhost:4200/')
-    await page.getByText('Forms').click()
-    await page.getByText('Form Layouts').click()
-    await page.getByText('Forms').click()
-    await page.getByText('Form Layouts').click()
+
 })
 
 
 test('iput field', async ({page}) => {
+    await page.getByText('Forms').click()
+    await page.getByText('Form Layouts').click()
+    
 
     // declare the const to get the email input field
    const emailInput = await page.locator('nb-card' , {hasText: 'Using the Grid'}).getByPlaceholder('Email');
@@ -32,6 +32,9 @@ test('iput field', async ({page}) => {
 })
 
 test('radio button', async ({page}) => {
+    await page.getByText('Forms').click()
+    await page.getByText('Form Layouts').click()
+    
     // declare the usingTheGridForm
     const usingTheGridForm = page.locator('nb-card' , {hasText: 'Using the Grid'});
     // check the option1 by label 
@@ -54,6 +57,27 @@ test('radio button', async ({page}) => {
     await expect(await usingTheGridForm.getByRole('radio', {name: 'Option 2'})).toBeChecked();
 });
 
-test.afterEach(async ({page})=>{
-     await page.close();
+
+test('checkbox', async ({page}) => {
+    // navigate to toast component page
+    await page.getByText('Modal & Overlays').click();
+    await page.getByText('Toastr').click();
+    // uncheck the "hiden on click" checkbox by using uncheck method 
+    await page.getByRole('checkbox', {name: 'Hide on click'}).uncheck({force:true});
+    // check the "pervent arising of duplicate toast" checkbox by using check method
+    await page.getByRole('checkbox', {name: 'Prevent arising of duplicate toast'}).check({force:true});
+    // using for loop to iterate through all checkboxes
+    const allcheckboxes =  page.getByRole('checkbox');
+    for (const box of await allcheckboxes.all()){
+        await box.check({force:true});
+        expect(await box.isChecked()).toBeTruthy();
+    }
+
+    // using for loop to uncheck all checkboxes
+    for (const box of await allcheckboxes.all()){
+        await box.uncheck({force:true});
+        expect(await box.isChecked()).toBeFalsy();
+    }
+
+
 });
