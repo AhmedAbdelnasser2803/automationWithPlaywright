@@ -78,6 +78,48 @@ test('checkbox', async ({page}) => {
         await box.uncheck({force:true});
         expect(await box.isChecked()).toBeFalsy();
     }
+});
 
 
+test('dropdown list', async ({page}) => {
+    // declare the var for dorpdown alocator 
+    const  dropdownList = page.locator('ngx-header nb-select');
+
+    // click on the drop down list to show all options using parent alocator 
+    await dropdownList.click();
+
+    // check the value on drop down list 
+    page.getByRole('list'); // for UL tag 
+    page.getByRole('listitem'); // for LI tag
+
+    const optionList = page.getByRole('list').locator('nb-option');
+    await expect (optionList).toHaveText(["Light" , "Dark" , "Cosmic" , "Corporate"]);
+
+    // choose cosmic option from drop downlist 
+    await optionList.filter({hasText: 'Cosmic'}).click();
+    // declare the backgreound color of the body
+    const backgroundColor = await page.locator('nb-layout-header');
+
+    // check that the value is changed through css style (rgb)
+    await expect (backgroundColor).toHaveCSS('background-color', 'rgb(50, 50, 89)');
+
+    // check all the css value 
+    const colors = {
+        "light": 'rgb(255, 255, 255)',
+        "dark": 'rgb(34, 43, 69)',
+        "cosmic" : 'rgb(50, 50, 89)',
+        "corporate" : 'rgb(255, 255, 255)'
+    }
+    await dropdownList.click();
+    for (const color of Object.keys(colors)){
+        await optionList.filter({hasText: color}).click();
+        await expect(backgroundColor).toHaveCSS('background-color', colors[color]);
+        if (color !== 'corporate'){
+            await dropdownList.click();
+        }
+        
+    }
+
+
+    
 });
