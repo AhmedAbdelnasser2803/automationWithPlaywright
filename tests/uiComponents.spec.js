@@ -1,5 +1,7 @@
 import {test, expect} from '@playwright/test';
+import { table } from 'console';
 import { get } from 'core-js/core/dict';
+import { afterEach } from 'node:test';
 
 
 test.beforeEach(async ({page})=>{
@@ -136,6 +138,29 @@ test('tooltip', async ({page}) => {
     page.getByRole('tooltip') //if you have a role tooltip created in your html
     const tooltip = await page.locator('nb-tooltip').textContent();
     // check the tooltip text
-    await expect(tooltip).toEqual('This is a tooltip');
+    expect(tooltip).toEqual('This is a tooltip');
 
 });   
+
+test('dialog box', async ({page}) => {
+    // navigate to dialog box page
+    await page.getByText('Tables & Data').click();
+    await page.getByText('Smart Table').click();
+    //  set alocators for delete btn 
+
+
+    // check the browser message 
+    page.on('dialog', dialog => {
+        expect(dialog.message()).toEqual('Are you sure you want to delete?');
+        dialog.accept();
+    });
+
+    await page.getByRole('table').locator('tr' , {hasText: 'fat@yandex.ru'}).locator('.nb-trash').click();
+    await expect(page.locator('table tr').first()).not.toHaveText('fat@yandex.ru');
+});
+
+// afterEach(async ({page}) => {
+//     // close the page after each test
+//     await page.close();
+// });
+
