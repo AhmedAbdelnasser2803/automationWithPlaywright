@@ -1,4 +1,5 @@
 import {test, expect} from '@playwright/test';
+import { get } from 'core-js/core/dict';
 
 
 test.beforeEach(async ({page})=>{
@@ -119,7 +120,22 @@ test('dropdown list', async ({page}) => {
         }
         
     }
-
-
-    
 });
+
+test('tooltip', async ({page}) => {
+    // navigate to tooltip page
+    await page.getByText('Modal & Overlays').click();
+    await page.getByText('Tooltip').click();
+
+    // decalre tooltip card 
+    const tooltipcard = page.locator('nb-card', {hasText: "Tooltip Placements"});
+    // hover on the input field to show the tooltip
+    await tooltipcard.getByRole('button', {name: "Top"}).hover();
+
+    // declare const for tooltip text
+    page.getByRole('tooltip') //if you have a role tooltip created in your html
+    const tooltip = await page.locator('nb-tooltip').textContent();
+    // check the tooltip text
+    await expect(tooltip).toEqual('This is a tooltip');
+
+});   
