@@ -155,12 +155,9 @@ test('dialog box', async ({page}) => {
         dialog.accept();
     });
 
-
-    // delete the first row and check if the first row is already deleted or not
-    await page.getByRole('table').locator('tr' , {hasText: 'fat@yandex.ru'}).locator('.nb-trash').click();  // the email change every time you run the test so you can change the email to the one that is in the first row of the table
+    await page.getByRole('table').locator('tr' , {hasText: 'fat@yandex.ru'}).locator('.nb-trash').click();
     await expect(page.locator('table tr').first()).not.toHaveText('fat@yandex.ru');
 });
-
 
 test('web tables' , async ({page}) => {
 
@@ -191,6 +188,7 @@ test('web tables' , async ({page}) => {
     
 
 });
+
 
 // afterEach(async ({page}) => {
 //     // close the page after each test
