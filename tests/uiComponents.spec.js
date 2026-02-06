@@ -185,6 +185,16 @@ test('web tables' , async ({page}) => {
     await expect(targetRow).toContainText('36');        // that's global method 
     await expect(targetAgeCell).toHaveText('36');   //that's specific method to get the age cell and check the value of it ONLY 
     /*---------------------------------------------------------------------------------------------------------------------------- */
+    //  get the row by id 
+    // 1. move to 2 page 
+    await page.locator('.ng2-smart-pagination-nav').getByText('2').click();
+    // declare the var to get the row with id 11  
+    const targetRowById = page.getByRole('row', {name: "11"}).filter({has: page.locator('td').nth(1).getByText('11')});
+    await targetRowById.locator('.nb-edit').click(); 
+    await page.locator('input-editor').getByPlaceholder('Age').clear();
+    await page.locator('input-editor').getByPlaceholder('Age').fill('36');
+    await page.locator('.nb-checkmark').click();
+    await expect(targetRowById.locator('td').nth(6)).toHaveText('36');
 
 });
 
