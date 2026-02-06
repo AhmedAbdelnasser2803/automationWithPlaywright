@@ -155,8 +155,39 @@ test('dialog box', async ({page}) => {
         dialog.accept();
     });
 
-    await page.getByRole('table').locator('tr' , {hasText: 'fat@yandex.ru'}).locator('.nb-trash').click();
+
+    // delete the first row and check if the first row is already deleted or not
+    await page.getByRole('table').locator('tr' , {hasText: 'fat@yandex.ru'}).locator('.nb-trash').click();  // the email change every time you run the test so you can change the email to the one that is in the first row of the table
     await expect(page.locator('table tr').first()).not.toHaveText('fat@yandex.ru');
+});
+
+
+test('web tables' , async ({page}) => {
+
+    // navigate to web table page
+    await page.getByText('Tables & Data').click();
+    await page.getByText('Smart Table').click();
+
+    //1. get the row by any test in this row 
+    const targetRow = page.getByRole('row', {name: "twitter@outlook.com"}); 
+    const targetAgeCell = targetRow.locator('td').nth(6); 
+
+    //2. click on edit icon to edit the row 
+    await targetRow.locator('.nb-edit').click();
+
+    // 3. clear rhe value of age cell 
+    await page.locator('input-editor').getByPlaceholder('Age').clear();
+
+    // 4. set the new value for age cell
+    await page.locator('input-editor').getByPlaceholder('Age').fill('36');
+
+    // 5. click on check icon to save the changes
+    await page.locator('.nb-checkmark').click();
+
+    // 6. check the new value is set or not by assertion
+    await expect(targetRow).toContainText('36');
+    await expect(targetAgeCell).toHaveText('36'); 
+
 });
 
 // afterEach(async ({page}) => {
