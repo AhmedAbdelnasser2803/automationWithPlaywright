@@ -196,6 +196,23 @@ test('web tables' , async ({page}) => {
     await page.locator('.nb-checkmark').click();
     await expect(targetRowById.locator('td').nth(6)).toHaveText('36');
 
+    /*---------------------------------------------------------------------------------------------------------------------------- */
+    // 3- test filter on table 
+    const ages = ['30', '40', '200'];
+    for(let age of ages){
+        await page.locator('input-filter').getByPlaceholder('Age').clear();
+        await page.locator('input-filter').getByPlaceholder('Age').fill(age); 
+        await page.waitForTimeout(500); // wait for the table to update after filtering
+        const ageRows = page.locator('tbody tr');
+        for (let row of await ageRows.all()){
+            if (age === '200'){
+                await expect(row).toHaveText('No data found');
+            } else {            
+            await expect(row.locator('td').nth(6)).toHaveText(age);
+            }
+        }
+    }
+
 });
 
 
