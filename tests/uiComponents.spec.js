@@ -185,7 +185,6 @@ test('web tables' , async ({page}) => {
     await expect(targetRow).toContainText('36');        // that's global method 
     await expect(targetAgeCell).toHaveText('36');   //that's specific method to get the age cell and check the value of it ONLY 
     /*---------------------------------------------------------------------------------------------------------------------------- */
-    
 
 });
 
