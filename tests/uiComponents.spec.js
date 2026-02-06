@@ -185,8 +185,9 @@ test('web tables' , async ({page}) => {
     await page.locator('.nb-checkmark').click();
 
     // 6. check the new value is set or not by assertion
-    await expect(targetRow).toContainText('36');
-    await expect(targetAgeCell).toHaveText('36'); 
+    await expect(targetRow).toContainText('36');        // that's global method 
+    await expect(targetAgeCell).toHaveText('36');   //that's specific method to get the age cell and check the value of it ONLY 
+    /*---------------------------------------------------------------------------------------------------------------------------- */
 
 });
 
