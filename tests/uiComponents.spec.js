@@ -212,12 +212,32 @@ test('web tables' , async ({page}) => {
             }
         }
     }
+});
 
+test('date picker', async ({page}) => {
+    // navigate to date picker page
+    await page.getByText('Forms').click();
+    await page.getByText('Datepicker').click();
+
+    // declare variable for date input field
+    const dateInputField = page.getByPlaceholder('Form Picker');
+
+    // click on th var to open the date picker
+    await dateInputField.click();
+
+    // choose the day of 14 
+    await page.locator('[class = "day-cell ng-star-inserted"]').getByText('14').click();
+
+    // choose the day of 1 using exact flag 
+    await dateInputField.click();
+    await page.locator('[class = "day-cell ng-star-inserted"]').getByText('1', {exact: true}).click();
+    // check the value of input date is 1 of jun 2024
+    await expect(dateInputField).toHaveValue("Feb 1, 2026")
 });
 
 
-// afterEach(async ({page}) => {
-//     // close the page after each test
-//     await page.close();
-// });
+afterEach(async ({page}) => {
+    // close the page after each test
+    await page.close();
+});
 
