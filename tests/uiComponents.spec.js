@@ -228,16 +228,43 @@ test('date picker', async ({page}) => {
     // choose the day of 14 
     await page.locator('[class = "day-cell ng-star-inserted"]').getByText('14').click();
 
-    // choose the day of 1 using exact flag 
+    // declare the object from date class to set the day 
+    const currentDate = new Date() ;
+    currentDate.setDate(currentDate.getDate() + 200);
+    const currentDay = (currentDate.getDate()).toString() ;
+    const currentMonthshot = currentDate.toLocaleString('En-US',{month: 'short'});
+    const currentMonthlong = currentDate.toLocaleString('En-US',{month: 'long'});
+    const currentYear = currentDate.getFullYear(); 
+    const dateToAssert = `${currentMonthshot} ${currentDay}, ${currentYear}`;
+     // month and year in the calendar header
+    const expectedMonthAndYear = `${currentMonthlong} ${currentYear}`;
+    // using if condetiton because the alocator of the cuurent date is different from the another day in the date picker
     await dateInputField.click();
-    await page.locator('[class = "day-cell ng-star-inserted"]').getByText('1', {exact: true}).click();
+    let calenderMonthAndYear = await page.locator('nb-calendar-view-mode').textContent();
+    while (!calenderMonthAndYear.includes(expectedMonthAndYear))
+        {
+            await page.locator('nb-calendar-pageable-navigation [data-name="chevron-right"]').click();
+            calenderMonthAndYear = await page.locator('nb-calendar-view-mode').textContent(); 
+        }
+        await page.locator('[class = "day-cell ng-star-inserted"]').getByText(currentDay, {exact: true}).click();
+    // if (currentDay == currentDate.getDate().toString()){
+    //     await page.locator('.cell-content').getByText(currentDay, {exact: true}).click();
+    // }else{
+    //     while (!calenderMonthAndYear.includes(expectedMonthAndYear))
+    //     {
+    //         await page.locator('nb-calendar-pageable-navigation [data-name="chevron-right"]').click();
+    //         calenderMonthAndYear = await page.locator('.calendar-navigation ng-star-inserted').textContent(); 
+    //     }
+    //     await page.locator('[class = "day-cell ng-star-inserted"]').getByText(currentDay, {exact: true}).click();
+    // }
+
     // check the value of input date is 1 of jun 2024
-    await expect(dateInputField).toHaveValue("Feb 1, 2026")
+    await expect(dateInputField).toHaveValue(dateToAssert);
 });
 
 
-afterEach(async ({page}) => {
-    // close the page after each test
-    await page.close();
-});
+// afterEach(async ({page}) => {
+//     // close the page after each test
+//     await page.close();
+// });
 
