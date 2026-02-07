@@ -262,6 +262,40 @@ test('date picker', async ({page}) => {
     await expect(dateInputField).toHaveValue(dateToAssert);
 });
 
+test( 'sliders', async ({page}) => {
+    // // 1. changing the value of cx and cy 
+    // // decalre var dor temp slider 
+    // const tempGauge = page.locator('[tabtitle="Temperature"] ngx-temperature-dragger circle')
+
+    // // set the value for attr cy and cx 
+    // await tempGauge.evaluate(Node => {
+    //     Node.setAttribute('cy', '204.948');
+    //     Node.setAttribute('cx', '252.701');
+    // })
+    // // click on the slider 
+    // await tempGauge.click(); 
+
+    // 2. mouse movement 
+    // scroll to view the full slider
+    const tempGauge = page.locator('[tabtitle="Temperature"] ngx-temperature-dragger')
+    await tempGauge.scrollIntoViewIfNeeded(); // to get the courrect bounding box value on the next step 
+
+    // declare boundig box for the slider
+    const box = await tempGauge.boundingBox();
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+
+    // move the the mouse to the center of the slider 
+    await page.mouse.move(x, y); // get the center of the elment 
+    await page.mouse.down(); // ho;d the mouse 
+    await page.mouse.move(x+100, y); // move the mouse 
+    await page.mouse.move(x-200, y-100)
+    await page.mouse.up(); // left the mouse 
+
+    // check if the resault match expected 
+    await expect(tempGauge).toContainText('26')
+});
+
 
 // afterEach(async ({page}) => {
 //     // close the page after each test
