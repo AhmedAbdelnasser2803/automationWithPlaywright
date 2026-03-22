@@ -8,6 +8,10 @@ test.beforeEach(async ({page})=>{
 test('navigate to form layout pgae using page object model',async ({page})=>{
     const navigationpage = new NavigationPage(page);
     await navigationpage.navigateToHomePage();
+    await navigationpage.navigateToDatePickerPage();
+    await navigationpage.navigateToSmartTablePage();
+    await navigationpage.navigateToTooltipPage();
+    await navigationpage.navigateToToastPage(); 
 })
 
 
