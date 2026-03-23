@@ -1,0 +1,35 @@
+import { Page } from "@playwright/test";
+
+export class FormLayoutPage {
+    
+    readonly page: Page;
+
+    constructor(page: Page) {
+        this.page = page;
+    }
+
+    /**
+     * using grid form to sign in 
+     * @param email set valid email 
+     * @param password set valid password
+     * @param options select any option on the grid
+     */
+
+    async signInUisngGridFromAndValidCardentialsAndSelectOptions(email: string, password: string, options: string){
+        const usingGridForm = await this.page.locator('nb-card' , {hasText: 'Using the Grid'});
+        await usingGridForm.getByRole('textbox', {name: 'Email'}).fill(email);
+        await usingGridForm.getByRole('textbox', {name: 'Password'}).fill(password);
+        await usingGridForm.getByRole('radio', {name: options}).check({force: true});
+        await usingGridForm.getByRole('button', {name: 'Sign in'}).click();
+    }
+
+    async submitLineFormUsingNameEmailAndCheckRememberMeOption(name: string, email: string, rememberMe: boolean){
+        const inLineForm = await this.page.locator('nb-card' , {hasText: 'Inline form'});
+        await inLineForm.getByRole('textbox', {name: 'Jane Doe'}).fill(name);
+        await inLineForm.getByRole('textbox', {name: 'Email'}).fill(email);
+
+        if (rememberMe)
+            await inLineForm.getByRole('checkbox', {name: 'Remember me'}).check({force: true});
+        await inLineForm.getByRole('button', {name: 'submit'}).click();
+    }
+}
