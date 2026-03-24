@@ -23,6 +23,11 @@ export class DatePickerPage {
 
     }
 
+    /**
+     * select range of date from date picker field
+     * @param numberOfDaysFromToday  the start number from today to select the date
+     * @param endDaysFromToday the end day from today to select the date
+     */
     async selectDatePickerWithRangeFromToday(numberOfDaysFromToday: number ,endDaysFromToday: number) {
         const dateInputField = this.page.getByPlaceholder('Range Picker');
 
@@ -35,6 +40,7 @@ export class DatePickerPage {
         const dateToAssert = `${dateToAssertStart} - ${dateToAssertEnd}`;
         expect(dateInputField).toHaveValue(dateToAssert);
     }
+
 
     /**
      * this fundtion to select date from the calender to optimize the code and make it more readable and maintainable
