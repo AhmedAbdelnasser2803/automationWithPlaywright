@@ -22,7 +22,13 @@ export class FormLayoutPage {
         await usingGridForm.getByRole('radio', {name: options}).check({force: true});
         await usingGridForm.getByRole('button', {name: 'Sign in'}).click();
     }
-
+    
+    /**
+     * signin using inline form and check remember me option
+     * @param name set valid name 
+     * @param email set valid email
+     * @param rememberMe chack or not check remember me option
+     */
     async submitLineFormUsingNameEmailAndCheckRememberMeOption(name: string, email: string, rememberMe: boolean){
         const inLineForm = await this.page.locator('nb-card' , {hasText: 'Inline form'});
         await inLineForm.getByRole('textbox', {name: 'Jane Doe'}).fill(name);
