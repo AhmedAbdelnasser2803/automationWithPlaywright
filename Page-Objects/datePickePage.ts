@@ -56,10 +56,10 @@ export class DatePickerPage {
         const dateToAssert = `${currentMonthshot} ${currentDay}, ${currentYear}`;
         // month and year in the calendar header
         const expectedMonthAndYear = `${currentMonthlong} ${currentYear}`;
-        let calenderMonthAndYear = await this.page.locator('nb-calendar-view-mode').textContent();
-        while (!calenderMonthAndYear.includes(expectedMonthAndYear)) {
+        let calenderMonthAndYear = (await this.page.locator('nb-calendar-view-mode').textContent()) ?? ''; 
+        while (!calenderMonthAndYear.includes(expectedMonthAndYear))  {
             await this.page.locator('nb-calendar-pageable-navigation [data-name="chevron-right"]').click();
-            calenderMonthAndYear = await this.page.locator('nb-calendar-view-mode').textContent();
+            calenderMonthAndYear = (await this.page.locator('nb-calendar-view-mode').textContent()) ?? '';
         }
         await this.page.locator('.day-cell.ng-star-inserted').getByText(currentDay, { exact: true }).click();
         return dateToAssert;
