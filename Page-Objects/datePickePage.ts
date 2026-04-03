@@ -1,9 +1,9 @@
 import { Page, expect } from "@playwright/test";
+import { HelperBase } from "./helperBase";
 
-export class DatePickerPage {
-    readonly page: Page;
+export class DatePickerPage extends HelperBase {
     constructor(page: Page) {
-        this.page = page;
+        super(page);
     }
 
     /** 
@@ -18,6 +18,7 @@ export class DatePickerPage {
         await dateInputField.click();
 
         const dateToAssert = await this.selectDateInCalender(numberOfDaysFromToday);
+        await this.waitForNumberOfSec(2);
         
         expect(dateInputField).toHaveValue(dateToAssert);
 
@@ -31,13 +32,20 @@ export class DatePickerPage {
     async selectDatePickerWithRangeFromToday(numberOfDaysFromToday: number ,endDaysFromToday: number) {
         const dateInputField = this.page.getByPlaceholder('Range Picker');
 
-        // click on th var to open the date picker
+        // click on the input to open the date picker
         await dateInputField.click();
 
-        const dateToAssertStart = await this.selectDateInCalender(numberOfDaysFromToday);
-        const dateToAssertEnd = await this.selectDateInCalender(endDaysFromToday);
+        // Select start date
+        const startDate = await this.selectDateInCalender(numberOfDaysFromToday);
         
-        const dateToAssert = `${dateToAssertStart} - ${dateToAssertEnd}`;
+        // For range selection, click the input again if calendar closed
+        await dateInputField.click();
+        
+        // Select end date
+        const endDate = await this.selectDateInCalender(endDaysFromToday);
+        
+        const dateToAssert = `${startDate} - ${endDate}`;
+        await this.waitForNumberOfSec(1); // Wait for value to update
         expect(dateInputField).toHaveValue(dateToAssert);
     }
 

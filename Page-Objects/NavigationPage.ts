@@ -1,10 +1,10 @@
 import { Page } from "@playwright/test";
+import { HelperBase } from "./helperBase";
 
-export class NavigationPage {
-    readonly page: Page;
+export class NavigationPage extends HelperBase{
 
-    constructor(page : Page) {
-        this.page = page;
+    constructor(page: Page) {
+        super(page);
     }
 
     async navigateToHomePage() {
